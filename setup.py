@@ -8,12 +8,12 @@ with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='edX Figures',
+    name='EdX React LMS',
     version='0.1.0',
     packages=find_packages(),
     include_package_data=True,
     license='MIT',
-    description='Reporting and data retrieval for Open edX',
+    description='Just a hack project - a separate LMS React app for Open EdX',
     long_description=README,
     url='https://www.appsembler.com/',
     author='Appsembler',

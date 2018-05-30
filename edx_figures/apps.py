@@ -1,13 +1,10 @@
 '''
-Provides application configuration for edX Figures
+Provides application configuration
 '''
 
 from django.apps import AppConfig
 
-class EdxFiguresConfig(AppConfig):
-    '''
-    Provides application configuration for edx Figures
-    '''
+class ReactLmsConfig(AppConfig):
 
-    name = 'edx_figures'
-    verbose_name = 'edX Figures'
+    name = 'react_lms'
+    verbose_name = 'EdX React LMS'
