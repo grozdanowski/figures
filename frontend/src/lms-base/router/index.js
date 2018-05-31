@@ -11,6 +11,7 @@ import RegisterView from 'views/RegisterView';
 import CourseAboutView from 'views/courseware/CourseAboutView';
 import CourseContentView from 'views/courseware/CourseContentView';
 import DashboardView from 'views/DashboardView';
+import LogoutView from 'views/LogoutView';
 
 import styles from 'sass-core/app-root-styles.scss';
 
@@ -19,18 +20,19 @@ class RouterRoot extends Component {
     return (
       <div className={styles['lms-root']}>
         <Switch location={history.location}>
-          <Route path='/course/:urlString' render={({ match }) => {return(<HeaderLayout courseId={match.params.urlString} isCourseware={true} />)} } />
+          <Route path='/react-lms/courseware/course/:urlString' render={({ match }) => {return(<HeaderLayout courseId={match.params.urlString} isCourseware={true} />)} } />
           <Route component={HeaderLayout} />
         </Switch>
         <div className={styles['lms-content']}>
           <Switch location={history.location}>
-            <Route exact path='/' component={IndexView} />
-            <Route exact path='/login' component={LoginView} />
-            <Route exact path='/register' component={RegisterView} />
-            <Route exact path='/dashboard' component={DashboardView} />
-            <Route path='/course/:urlString' render={({ match }) => {return(<CourseAboutView courseId={match.params.urlString} />)} } />
-            <Route path='/courseware/course/:urlString' render={({ match }) => {return(<CourseContentView courseId={match.params.urlString} />)} } />
-            <Route path='/:urlString' render={({ match }) => {return(<p>{match.params.urlString}</p>)}} />
+            <Route exact path='/react-lms/' component={IndexView} />
+            <Route exact path='/react-lms/login' component={LoginView} />
+            <Route exact path='/react-lms/logout' render={() => {return(<LogoutView history={history} />)}} />
+            <Route exact path='/react-lms/register' component={RegisterView} />
+            <Route exact path='/react-lms/dashboard' component={DashboardView} />
+            <Route path='/react-lms/course/:urlString' render={({ match }) => {return(<CourseAboutView courseId={match.params.urlString} />)} } />
+            <Route path='/react-lms/course-experience/course/:urlString' render={({ match }) => {return(<CourseContentView courseId={match.params.urlString} />)} } />
+            <Route path='/react-lms/:urlString' render={({ match }) => {return(<p>{match.params.urlString}</p>)}} />
           </Switch>
         </div>
         <FooterLayout />

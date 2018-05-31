@@ -12,7 +12,8 @@ class CardCarousel extends Component {
     super(props);
 
     this.state = {
-      activeCard: 0
+      activeCard: 0,
+      cardData: []
     };
 
     this.nextCard = this.nextCard.bind(this);
@@ -38,8 +39,14 @@ class CardCarousel extends Component {
     })
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    this.setState({
+      cardData: nextProps.cardData
+    })
+  }
+
   render() {
-    const cardsView = this.props.cardData.map((item, index) => {
+    const cardsView = this.state.cardData.map((item, index) => {
       return (
         <Card
           key = {index}
@@ -48,11 +55,11 @@ class CardCarousel extends Component {
           index = {index}
           activeItem = {this.state.activeCard}
           itemData = {{
-            courseImage: item.courseImage,
-            courseTitle: item.courseTitle,
-            courseCode: item.courseCode,
-            courseStart: item.courseStart,
-            courseURL: 'test',
+            courseImage: item.media['course_image']['uri'],
+            courseTitle: item.name,
+            courseCode: item.number,
+            courseStart: item.startDisplay ? item.startDisplay : item.start,
+            courseURL: '/react-lms/course/' + item.id,
           }}
           setActiveItem = {this.setActiveCard}
         />

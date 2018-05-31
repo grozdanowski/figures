@@ -13,10 +13,10 @@ class UserHello extends Component {
 
     return (
       <div className={styles['user-container']}>
-        <img src={this.props.user.get('profile_image')['image_url_large']} className={styles['user-image']} alt={this.props.user.get('name')} />
+        <img src={this.props.user['profile_image']['image_url_large']} className={styles['user-image']} alt={this.props.user['name']} />
         <div className={styles['user-info']}>
           <span className={styles['hello-text']}>
-            Hi, {this.props.user.get('name').split(' ')[0]}!
+            Hi, {this.props.user['name'].split(' ')[0]}!
           </span>
           <p>Welcome back to your Dashboard! Great to see you! You are currently enrolled into 3 courses - better get started!</p>
           <ul className={styles['stats']}>

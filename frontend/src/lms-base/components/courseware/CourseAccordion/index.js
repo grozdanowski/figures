@@ -17,12 +17,18 @@ class CourseAccordion extends Component {
     }
 
     this.toggleAccordionVisibility = this.toggleAccordionVisibility.bind(this);
+    this.sectionChangeFunction = this.sectionChangeFunction.bind(this);
   }
 
   toggleAccordionVisibility = (newView) => {
     this.setState({
       accordionVisible: !this.state.accordionVisible
     })
+  }
+
+  sectionChangeFunction = (courseID, chapterID, sectionID) => {
+    this.props.changeActiveViewFunction('course-navigation');
+    this.props.fetchDataFunction(courseID, chapterID, sectionID);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -35,7 +41,6 @@ class CourseAccordion extends Component {
   }
 
   render() {
-    console.log(this.state.accordionData)
     const accordionRender = this.state.accordionData && this.state.accordionData.chapters.map((chapter, chapterIndex) => {
       let sectionGraded = false;
       const chapterSections = chapter.sections.map((section, sectionIndex) => {
@@ -44,7 +49,7 @@ class CourseAccordion extends Component {
         }
         return(
           <li className={cx({'section-container': true, 'section-active': section.active})} key={section['url_name']}>
-            <button className={styles['section-name']} onClick={() => console.log('go to section', section['display_name'])}>
+            <button className={styles['section-name']} onClick={() => this.sectionChangeFunction(this.props.courseID, chapter['url_name'], section['url_name'])}>
               <span className={styles['section-graded-indicator']}>
                 <img
                   src={section.graded ? gradedIcon : nonGradedIcon}

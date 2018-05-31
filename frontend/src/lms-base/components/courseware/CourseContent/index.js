@@ -63,6 +63,9 @@ class CourseContent extends Component {
           <CourseAccordion
             accordionData = {this.state.accordionData}
             accordionVisible = {this.state.accordionVisible}
+            fetchDataFunction = {this.props.fetchDataFunction}
+            changeActiveViewFunction = {this.changeActiveView}
+            courseID = {this.props.courseID}
           />
           {(this.state.activeView === 'course-content') && courseContentDisplay}
         </main>

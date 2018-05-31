@@ -16,11 +16,14 @@ class CourseContentView extends Component {
     super(props);
 
     this.state = {
+      courseData: {},
       navData: [],
       contentData: Immutable.List(),
-      activeSequence: 0
+      activeSequence: 0,
+      apiFetchActive: false
     };
 
+    this.triggerApiFetchActive = this.triggerApiFetchActive.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.extractSequenceData = this.extractSequenceData.bind(this);
     this.parseData = this.parseData.bind(this);
@@ -28,13 +31,28 @@ class CourseContentView extends Component {
     this.setActiveSequence = this.setActiveSequence.bind(this);
   }
 
-  fetchData = () => {
-    // api calls go here
+  triggerApiFetchActive = () => {
     this.setState({
-      accordionData: testData['accordion_json']
+      apiFetchActive: !this.state.apiFetchActive
     })
-    const rawData = require('html2json').html2json(testData.content)['child'][0]['child'];
-    this.extractSequenceData(rawData);
+  }
+
+  fetchData = (courseID, courseChapter, courseSection) => {
+    const courseChapterURLPart = courseChapter ? courseChapter + '/' : '';
+    const courseSectionURLPart = courseSection ? courseSection + '/' : '';
+    const fetchURL = '/react-lms/courses/' + courseID + '/courseware/' + courseChapterURLPart + courseSectionURLPart;
+    this.triggerApiFetchActive();
+    this.setActiveSequence(0);
+    fetch(fetchURL, { credentials: "same-origin" })
+      .then(response => response.json())
+      .then(json => this.setState({
+        courseData: json,
+        accordionData: json['accordion_json']
+      }, () => {
+        this.triggerApiFetchActive();
+        const rawData = require('html2json').html2json(this.state.courseData.content)['child'][0]['child'];
+        this.extractSequenceData(rawData);
+      }))
   }
 
   extractSequenceData = (rawData) => {
@@ -104,7 +122,7 @@ class CourseContentView extends Component {
   }
 
   componentDidMount = () => {
-    this.fetchData();
+    this.fetchData(this.props.courseId, '', '');
   }
 
   render() {
@@ -119,6 +137,8 @@ class CourseContentView extends Component {
         <CourseContent
           courseContent = {this.state.contentData.get(this.state.activeSequence) ? decode(this.state.contentData.get(this.state.activeSequence).child[0].text) : ''}
           accordionData = {this.state.accordionData}
+          fetchDataFunction = {this.fetchData}
+          courseID = {this.props.courseId}
         />
       </div>
     );

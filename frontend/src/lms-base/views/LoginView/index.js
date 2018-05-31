@@ -9,7 +9,7 @@ import heroBackground from 'static/images/defaults/default-hero-bg.jpg';
 let cx = classNames.bind(styles);
 
 class LoginView extends Component {
-
+  
   render() {
 
     return (

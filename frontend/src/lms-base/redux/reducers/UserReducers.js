@@ -1,6 +1,6 @@
-import Immutable from 'immutable';
+import { SET_USER_DATA, SET_ACTIVE_USERNAME, SET_AUTH_STATUS } from '../actions/ActionTypes';
 
-const initialState = Immutable.Map({
+const initialState = {
   isAuthenticated: true,
   biography: '',
   country: 'US',
@@ -27,10 +27,31 @@ const initialState = Immutable.Map({
   year_of_birth: '1974',
   account_privacy: '',
   accomplishments_shared: '',
-})
+}
 
 const user = (state = initialState, action) => {
   switch (action.type) {
+    case SET_ACTIVE_USERNAME:
+      if (action.username) {
+        return Object.assign({}, state, {
+          isAuthenticated: true,
+          username: action.username
+        })
+      } else {
+        return Object.assign({}, state, {
+          isAuthenticated: false
+        })
+      }
+    case SET_USER_DATA:
+      return Object.assign({}, state, {
+        isAuthenticated: true,
+        ...
+        action.userData
+      })
+    case SET_AUTH_STATUS:
+      return Object.assign({}, state, {
+        isAuthenticated: action.newStatus
+      })
     default:
       return state
   }

@@ -1,22 +1,22 @@
 export const HeaderLinksNonAuth = [
   {
-    title: 'Course catalog',
-    target: '/courses',
+    title: 'Example link',
+    target: '/react-lms/',
   },
   {
-    title: 'About us',
-    target: '/about',
+    title: 'Example link',
+    target: '/react-lms/',
   },
   {
     separator: true,
   },
   {
     title: 'Log in',
-    target: '/login',
+    target: '/react-lms/login',
   },
   {
     title: 'Sign up',
-    target: '/register',
+    target: '/react-lms/register',
     isCTA: true,
   }
 ]
@@ -24,33 +24,29 @@ export const HeaderLinksNonAuth = [
 export const HeaderLinksAuth = [
   {
     title: 'Dashboard',
-    target: '/dashboard',
-  },
-  {
-    title: 'Course catalog',
-    target: '/courses',
+    target: '/react-lms/dashboard',
   }
 ]
 
 export const UserDropdownMenu = [
   {
     title: 'Dashboard',
-    target: '/dashboard',
+    target: '/react-lms/dashboard',
   },
   {
     title: 'My Profile',
-    target: '/profile',
+    target: '/react-lms/',
   },
   {
     title: 'My Account',
-    target: '/account',
+    target: '/react-lms/',
   },
   {
     separator: true,
   },
   {
     title: 'Sign out',
-    target: '/logout',
+    target: '/react-lms/logout',
   }
 ]
 

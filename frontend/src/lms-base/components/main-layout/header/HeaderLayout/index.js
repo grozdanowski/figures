@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { fetchAuthStatus, fetchUserData } from 'redux/actions/Actions';
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import styles from './_HeaderLayout.scss';
@@ -16,7 +17,19 @@ let cx = classNames.bind(styles);
 
 class HeaderLayout extends Component {
 
+  componentDidMount = () => {
+    this.props.fetchAuthStatus();
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    console.log(nextProps.userAuthenticated)
+    if ((nextProps.userAuthenticated) && (nextProps.username !== this.props.username)) {
+      this.props.fetchUserData('/api/user/v1/accounts/' + nextProps.username)
+    }
+  }
+
   render() {
+
     const headerLogo = this.props.inCourseware ? logoSymbolPositive : fullLogoPositive;
 
     return (
@@ -24,7 +37,7 @@ class HeaderLayout extends Component {
         <div className={cx(styles['container'], styles['header-container'])}>
           <div className={styles['logo-contaner']}>
             <NavLink
-              to='/'
+              to='/react-lms'
             >
               <img
                 src={headerLogo}
@@ -50,14 +63,14 @@ class HeaderLayout extends Component {
             <div className={styles['user-container']}>
               <span className={styles['nav-separator']} />
               <img
-                src={this.props.user.get('profile_image')['image_url_medium']}
-                alt={this.props.user.get('name')}
+                src={this.props.user['profile_image']['image_url_medium']}
+                alt={this.props.user['name']}
                 role='presentation'
                 className={styles['user-avatar']}
               />
               <DropdownNav
                 dropdownItems={UserDropdownMenu}
-                label={this.props.user.get('name')}
+                label={this.props.user['name']}
               />
             </div>
           )}
@@ -82,12 +95,20 @@ HeaderLayout.defaultProps = {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  userAuthenticated: state.user.get('isAuthenticated'),
+  userAuthenticated: state.user['isAuthenticated'],
   user: state.user,
   platformName: state.platform.platformName,
-  course: state.course
+  course: state.course,
+  username: state.user.username,
+  apiFetching: state.platform.apiFetching,
+})
+
+const mapDispatchToProps = dispatch => ({
+  fetchAuthStatus: () => dispatch(fetchAuthStatus()),
+  fetchUserData: (apiURL) => dispatch(fetchUserData(apiURL)),
 })
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(HeaderLayout)

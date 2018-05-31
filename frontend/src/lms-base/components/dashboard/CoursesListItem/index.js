@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CTAButton from 'components/ui-elements/CTAButton';
+import { NavLink } from 'react-router-dom';
 import styles from './_CoursesListItem.scss';
 import classNames from 'classnames/bind';
 
@@ -9,30 +9,62 @@ import twitterIcon from 'static/images/fontawesome-svg/brands/twitter.svg';
 
 let cx = classNames.bind(styles);
 
+const courseInfoAPI = '/api/courses/v1/courses/'
+
 
 class CoursesListItem extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      apiFetchActive: false,
+      courseData: {}
+    }
+
+    this.triggerApiFetchActive = this.triggerApiFetchActive.bind(this);
+    this.fetchCourseData = this.fetchCourseData.bind(this);
+  }
+
+  triggerApiFetchActive = () => {
+    this.setState({
+      apiFetchActive: !this.state.apiFetchActive
+    })
+  }
+
+  fetchCourseData = () => {
+    this.triggerApiFetchActive();
+    fetch(courseInfoAPI + this.props.courseId, { credentials: "same-origin" })
+      .then(response => response.json())
+      .then(json => this.setState({
+        courseData: json
+      }, this.triggerApiFetchActive()))
+  }
+
+  componentDidMount = () => {
+    this.fetchCourseData()
+  }
 
   render() {
 
-    return (
+    const renderView = this.state.courseData['media'] && (
       <div className={styles['course-container']}>
         <span
           className={styles['course-image-container']}
-          style={{backgroundImage: 'url(' + this.props.courseData['media']['course_image']['uri'] + ')'}}
+          style={{backgroundImage: 'url(' + this.state.courseData['media']['course_image']['uri'] + ')'}}
         />
         <div className={styles['course-info-container']}>
           <div className={styles['course-info-upper']}>
-            <h2 className={styles['title']}>{this.props.courseData['name']}</h2>
-            <span className={styles['code']}>{this.props.courseData['number']}</span>
+            <h2 className={styles['title']}>{this.state.courseData['name']}</h2>
+            <span className={styles['code']}>{this.state.courseData['number']}</span>
             <div className={styles['course-dates']}>
-              {this.props.courseData['start'] && (
+              {this.state.courseData['start'] && (
                 <span className={styles['course-date']}>
-                  Starts: <b>{this.props.courseData['start']}</b>
+                  Starts: <b>{this.state.courseData['start']}</b>
                 </span>
               )}
-              {this.props.courseData['end'] && (
+              {this.state.courseData['end'] && (
                 <span className={styles['course-date']}>
-                  Ends: <b>{this.props.courseData['end']}</b>
+                  Ends: <b>{this.state.courseData['end']}</b>
                 </span>
               )}
             </div>
@@ -48,13 +80,20 @@ class CoursesListItem extends Component {
           </div>
         </div>
         <div className={styles['course-cta-container']}>
-          <CTAButton
-            label = 'Go to the course'
-            target = '/courseware/course/test'
-            size = 'small'
-          />
+          <NavLink
+            to = {'/react-lms/course-experience/course/' + this.props.courseId}
+            className = {styles['course-button']}
+          >
+            Go to the course
+          </NavLink>
         </div>
       </div>
+    )
+
+    return (
+      <article className={styles['course-wrapper']}>
+        {renderView}
+      </article>
     );
   }
 }

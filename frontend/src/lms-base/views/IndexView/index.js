@@ -16,48 +16,41 @@ import courseImage3 from 'static/images/course-test/course-3.jpeg';
 
 let cx = classNames.bind(styles);
 
-const cardData = [
-  {
-    courseTitle: 'Quality of Life: Livability in Future Cities',
-    courseCode: 'ethx-fc-02x-1',
-    startDate: 'Jan 3rd, 2019',
-    courseImage: courseImage1
-  },
-  {
-    courseTitle: 'Planning out a perfect workspace for developers',
-    courseCode: 'A212',
-    startDate: 'Already started',
-    courseImage: courseImage2
-  },
-  {
-    courseTitle: 'Developing in JAVA',
-    courseCode: 'A241',
-    startDate: 'Self-paced',
-    courseImage: courseImage3
-  },
-  {
-    courseTitle: 'Quality of Life: Livability in Future Cities',
-    courseCode: 'ethx-fc-02x-1',
-    startDate: 'Jan 3rd, 2019',
-    courseImage: courseImage1
-  },
-  {
-    courseTitle: 'Planning out a perfect workspace for developers',
-    courseCode: 'A212',
-    startDate: 'Already started',
-    courseImage: courseImage2
-  },
-  {
-    courseTitle: 'Developing in JAVA',
-    courseCode: 'A241',
-    startDate: 'Self-paced',
-    courseImage: courseImage3
-  }
-]
+const coursesListAPI = '/api/courses/v1/courses/'
 
 const searchTags = ['Open EdX', 'LMS', 'Open source', 'Python development']
 
 class IndexView extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      coursesList: [],
+      apiFetchActive: false
+    }
+
+    this.triggerApiFetchActive = this.triggerApiFetchActive.bind(this);
+    this.getCourseData = this.getCourseData.bind(this);
+  }
+
+  triggerApiFetchActive = () => {
+    this.setState({
+      apiFetchActive: !this.state.apiFetchActive
+    })
+  }
+
+  getCourseData = () => {
+    this.triggerApiFetchActive();
+    fetch(coursesListAPI)
+      .then(response => response.json())
+      .then(json => this.setState({
+        coursesList: json['results']
+      }, this.triggerApiFetchActive()))
+  }
+
+  componentDidMount = () => {
+    this.getCourseData();
+  }
 
   render() {
 
@@ -85,7 +78,7 @@ class IndexView extends Component {
           </div>
           <div className={styles['courses-cards-container']}>
             <CardCarousel
-              cardData = {cardData}
+              cardData = {this.state.coursesList}
             />
           </div>
         </section>
