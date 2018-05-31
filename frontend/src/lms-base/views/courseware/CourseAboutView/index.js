@@ -161,7 +161,7 @@ class CourseAboutView extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  userAuthenticated: state.user.get('isAuthenticated')
+  userAuthenticated: state.user['isAuthenticated']
 })
 
 export default connect(
